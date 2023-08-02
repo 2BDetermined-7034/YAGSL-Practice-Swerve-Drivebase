@@ -2,6 +2,10 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +64,24 @@ public class SwerveSubsystem extends SubsystemBase {
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
     {
         swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
+    }
+
+    @Override
+    public void periodic() {
+
+        updateLogging();
+    }
+
+    private void updateLogging() {
+
+        SwerveModuleState[] moduleStates = swerveDrive.getStates();
+        for (int i = 0; i < moduleStates.length; i++) {
+            double angle = moduleStates[i].angle.getDegrees();
+            SmartDashboard.putNumber("Module " + i + " Angle", angle);
+        }
+
+
+
     }
 
     public SwerveController getSwerveController() {
