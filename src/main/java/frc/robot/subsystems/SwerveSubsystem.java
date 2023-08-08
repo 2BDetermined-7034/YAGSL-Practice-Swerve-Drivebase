@@ -20,9 +20,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 
-
 public class SwerveSubsystem extends SubsystemBase {
-    SwerveDrive swerveDrive  = new SwerveParser(new File(Filesystem.getDeployDirectory(),"swerve/neo")).createSwerveDrive();
+    File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
+    SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
 
     // With eager singleton initialization, any static variables/fields used in the 
     // constructor must appear before the "INSTANCE" variable so that they are initialized 
@@ -79,13 +79,6 @@ public class SwerveSubsystem extends SubsystemBase {
             double angle = moduleStates[i].angle.getDegrees();
             SmartDashboard.putNumber("Module " + i + " Angle", angle);
         }
-
-//        SwerveModuleState[] moduleStates = swerveDrive.getStates();
-//        for (int i = 0; i < moduleStates.length; i++) {
-//            double angle = moduleStates[i].angle.getDegrees();
-//            Glass.putString("Module " + i + " Angle", Double.toString(angle));
-//        }
-
 
 
 
