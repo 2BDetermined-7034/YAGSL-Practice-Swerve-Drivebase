@@ -21,6 +21,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 
 public class SwerveSubsystem extends SubsystemBase {
+    
+    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
     SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
 
