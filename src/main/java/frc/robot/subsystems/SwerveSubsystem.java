@@ -5,10 +5,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import swervelib.SwerveController;
@@ -21,8 +24,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 
 public class SwerveSubsystem extends SubsystemBase {
-    File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
-    SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
+
+    SwerveDrive swerveDrive  = new SwerveParser(new File(Filesystem.getDeployDirectory(),"swerve/neo")).createSwerveDrive();
 
     // With eager singleton initialization, any static variables/fields used in the 
     // constructor must appear before the "INSTANCE" variable so that they are initialized 
@@ -80,6 +83,15 @@ public class SwerveSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Module " + i + " Angle", angle);
         }
 
+
+//        SwerveModuleState[] moduleStates = swerveDrive.getStates();
+//        for (int i = 0; i < moduleStates.length; i++) {
+//            double angle = moduleStates[i].angle.getDegrees();
+//            Shuffleboard.getTab("Drive")
+//                    .add("Module " + i + " Angle", angle)
+//                    .withWidget(BuiltInWidgets.kDial)
+//                    .withProperties(Map.of("min", 0, "max", 360));
+//        }
 
 
     }
