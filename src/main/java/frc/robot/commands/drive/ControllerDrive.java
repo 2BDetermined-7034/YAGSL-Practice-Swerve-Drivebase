@@ -1,11 +1,8 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystems.SwerveSubsystem;
-import swervelib.SwerveDrive;
 
 import java.util.function.DoubleSupplier;
 
