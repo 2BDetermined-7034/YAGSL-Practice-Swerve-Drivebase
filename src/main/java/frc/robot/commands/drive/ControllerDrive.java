@@ -11,17 +11,19 @@ public class ControllerDrive extends CommandBase {
     private final DoubleSupplier x;
     private final DoubleSupplier y;
     private final DoubleSupplier rawAxis;
+    private final boolean isOpenLoop;
 
-    public ControllerDrive(SwerveSubsystem swerveSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rawAxis) {
+    public ControllerDrive(SwerveSubsystem swerveSubsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rawAxis, boolean isOpenLoop) {
         this.swerveSubsystem = swerveSubsystem;
         this.x = x;
         this.y = y;
         this.rawAxis = rawAxis;
+        this.isOpenLoop = isOpenLoop;
         addRequirements(swerveSubsystem);
     }
 
     @Override
     public void execute() {
-        swerveSubsystem.drive(new Translation2d(x.getAsDouble(), y.getAsDouble()), rawAxis.getAsDouble(), false, true);
+        swerveSubsystem.drive(new Translation2d(x.getAsDouble(), y.getAsDouble()), rawAxis.getAsDouble(), false, isOpenLoop);
     }
 }

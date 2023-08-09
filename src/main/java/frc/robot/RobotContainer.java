@@ -37,7 +37,7 @@ public class RobotContainer {
 //          () -> true, false, true
 //          );
 
-  public static final ControllerDrive driveCommand = new ControllerDrive(drivebase, driverController::getLeftX, driverController::getLeftY, () -> driverController.getRawAxis(2)); //TODO Change the axis since I have no idea what it is now
+  public static final ControllerDrive driveCommand = new ControllerDrive(drivebase, driverController::getLeftX, driverController::getLeftY, () -> driverController.getRawAxis(2), true); //TODO Change the axis since I have no idea what it is now
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
