@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
 import java.io.IOException;
@@ -70,19 +69,5 @@ public class SwerveSubsystem extends SubsystemBase {
     public Rotation2d getHeading() {
         return swerveDrive.getYaw();
     }
-
-    @Override
-    public void periodic() {
-        updateLogging();
-    }
-
-    private void updateLogging() {
-        SmartDashboard.putNumber("frontleft encoder", swerveDrive.getModules()[0].getAbsolutePosition());
-        SmartDashboard.putNumber("front right encoder", swerveDrive.getModules()[1].getAbsolutePosition());
-        SmartDashboard.putNumber("backleft encoder", swerveDrive.getModules()[2].getAbsolutePosition());
-        SmartDashboard.putNumber("backright encoder", swerveDrive.getModules()[3].getAbsolutePosition());
-
-    }
-
 }
 
