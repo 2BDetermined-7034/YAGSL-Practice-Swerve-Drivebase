@@ -20,7 +20,7 @@ import swervelib.SwerveController;
 public class TeleopDrive extends CommandBase
 {
 
-    private final SwerveSubsystem  swerve;
+    private final SwerveSubsystem swerve;
     private final DoubleSupplier   vX;
     private final DoubleSupplier   vY;
     private final DoubleSupplier   omega;

@@ -4,20 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PS4Controller;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.drive.ControllerDrive;
-import frc.robot.commands.drive.TeleopDrive;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -31,19 +25,18 @@ public class RobotContainer {
   public static final PS4Controller driverController = new PS4Controller(0);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
 
-//  public static final TeleopDrive teleopDrive = new TeleopDrive(drivebase,
-//          driverController::getLeftX, driverController::getLeftY,
-//          () -> driverController.getRawAxis(2),
-//          () -> true, false, true
-//          );
+  public static final TeleopDrive teleopDrive = new TeleopDrive(drivebase,
+          driverController::getLeftX, driverController::getLeftY,
+          () -> driverController.getRawAxis(2),
+          () -> true, false, true
+          );
 
-  public static final ControllerDrive driveCommand = new ControllerDrive(drivebase, driverController::getLeftX, driverController::getLeftY, () -> driverController.getRawAxis(2), true); //TODO Change the axis since I have no idea what it is now
+  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> 0, () -> 0, () -> driverController.getRawAxis(2), true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
     // Configure the trigger bindings
-//    drivebase.setDefaultCommand(teleopDrive);
-    drivebase.setDefaultCommand(driveCommand);
+    drivebase.setDefaultCommand(controlDrive);
     configureBindings();
   }
 

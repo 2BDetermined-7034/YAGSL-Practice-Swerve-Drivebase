@@ -11,12 +11,12 @@ import swervelib.SwerveController;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 
 public class SwerveSubsystem extends SubsystemBase {
+
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
     SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
 
@@ -55,6 +55,13 @@ public class SwerveSubsystem extends SubsystemBase {
      * the {@link #getInstance()} method to get the singleton instance.
      */
     public SwerveSubsystem() throws IOException {
+        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
+    }
+
+    @Override
+    public void periodic() {
+        swerveDrive.updateOdometry();
+//        swerveDrive.drive(new Translation2d(1,1), 0, false, false);
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
@@ -69,5 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
     public Rotation2d getHeading() {
         return swerveDrive.getYaw();
     }
+
+
 }
 
