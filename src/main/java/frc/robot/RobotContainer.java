@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
+import frc.robot.commands.drive.AbsoluteFieldDrive;
 import frc.robot.commands.drive.ControllerDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -31,7 +34,16 @@ public class RobotContainer {
           () -> true, false, true
           );
 
-  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> 0, () -> 0, () -> driverController.getRawAxis(2), true);
+  AbsoluteFieldDrive closedAbsoluteDrive = new AbsoluteFieldDrive(drivebase,
+
+          () -> MathUtil.applyDeadband(driverController.getLeftY(),
+                  0.1),
+          () -> MathUtil.applyDeadband(driverController.getLeftX(),
+                  0.1),
+          () -> -driverController.getRawAxis(2),
+          false);
+
+  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2), 0.1), true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
@@ -51,6 +63,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
+    new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
+    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
   }
 
   /**
