@@ -27,7 +27,10 @@ public class ControllerDrive extends CommandBase {
 
     @Override
     public void execute() {
-        swerveSubsystem.drive(new Translation2d(x.getAsDouble() * controller.config.maxSpeed, y.getAsDouble() * controller.config.maxSpeed), rawAxis.getAsDouble() * controller.config.maxAngularVelocity, true, isOpenLoop);
+        swerveSubsystem.drive(new Translation2d(y.getAsDouble() * controller.config.maxSpeed, x.getAsDouble() * controller.config.maxSpeed), rawAxis.getAsDouble() * controller.config.maxAngularVelocity, true, isOpenLoop);
+        // REMEMBER - X (first variable) in the translation 2D corresponds to forwards movement!
+        // "positive x is torwards the bow (front) and positive y is torwards port (left)" WHYYY
+        // 💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀💀
     }
 
 

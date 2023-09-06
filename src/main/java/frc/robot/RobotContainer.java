@@ -43,7 +43,7 @@ public class RobotContainer {
           () -> -driverController.getRawAxis(2),
           false);
 
-  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2), 0.1), true);
+  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2), 0.1), true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
