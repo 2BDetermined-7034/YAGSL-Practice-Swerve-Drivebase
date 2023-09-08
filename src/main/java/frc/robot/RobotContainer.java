@@ -6,15 +6,15 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
-import frc.robot.commands.drive.AbsoluteFieldDrive;
-import frc.robot.commands.drive.ControllerDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.AutoPathFactory;
+import frc.robot.commands.drive.AbsoluteFieldDrive;
+import frc.robot.commands.drive.ControllerDrive;
 import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -74,6 +74,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return AutoPathFactory.testAuto(drivebase);
   }
 }

@@ -1,9 +1,17 @@
 package frc.robot.subsystems;
 
 
+import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.File;
@@ -11,6 +19,7 @@ import java.io.IOException;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import swervelib.SwerveController;
+import swervelib.SwerveModule;
 import swervelib.imu.NavXSwerve;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
@@ -24,6 +33,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
     SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
+    private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
+
+    private final Field2d field2d;
+    private SwerveDrivePoseEstimator estimator;
+    private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+            new Translation2d(24 / 2.0, 24 / 2.0), // 24 is the length and width
+            new Translation2d(24 / 2.0, -24 / 2.0),
+            new Translation2d(-24 / 2.0, 24 / 2.0),
+            new Translation2d(-24 / 2.0, -24 / 2.0)
+    );
 
 
     // With eager singleton initialization, any static variables/fields used in the 
@@ -62,6 +81,15 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public SwerveSubsystem() throws IOException {
         SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
+        field2d = new Field2d();
+        estimator = new SwerveDrivePoseEstimator(
+                m_kinematics,
+                getGyroscopeRotation(),
+                swerveDrive.getModulePositions(),
+                new Pose2d(),
+                VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
+                VecBuilder.fill(0.5, 0.5, 0.5)
+        );
     }
 
     @Override
@@ -78,7 +106,9 @@ public class SwerveSubsystem extends SubsystemBase {
     {
         swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
     }
-
+    public SwerveDriveKinematics getKinematics() {
+        return swerveDrive.kinematics; 
+    }
     public void zeroGyro() {
         swerveDrive.zeroGyro();
     }
@@ -88,6 +118,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public Rotation2d getHeading() {
         return swerveDrive.getYaw();
+    }
+    public static Rotation2d getGyroscopeRotation() {
+        return Rotation2d.fromDegrees(360 - m_navx.getYaw());
     }
     public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle)
     {
@@ -122,6 +155,25 @@ public class SwerveSubsystem extends SubsystemBase {
         sc.getTargetSpeeds(0, 0, 0, yaw);
         swerveDrive.drive(new Translation2d(), sc.getTargetSpeeds(0, 0, 0, yaw).omegaRadiansPerSecond * 0.1, true, true);
     }
+    public void stop() {
+        swerveDrive.lockPose();
+    }
+    public void addTrajectory(PathPlannerTrajectory m_trajectory) {
+        field2d.getObject("traj").setTrajectory(m_trajectory);
+    }
+
+    public void setPosition(Pose2d position) {
+        zeroGyro();
+        estimator.resetPosition(
+                getGyroscopeRotation(),
+                swerveDrive.getModulePositions(),
+                position
+        );
+    }
+    public void resetOdometry(Pose2d initialHolonomicPose)
+    {
+        swerveDrive.resetOdometry(initialHolonomicPose);
+    }
 
     /**
      * Gets the current pose (position and rotation) of the robot, as reported by odometry.
@@ -132,6 +184,90 @@ public class SwerveSubsystem extends SubsystemBase {
     {
         return swerveDrive.getPose();
     }
+    public Pose2d getPosition() {
+        return estimator.getEstimatedPosition();
+    }
+
+    /**
+     * Set chassis speeds with closed-loop velocity control.
+     *
+     * @param chassisSpeeds Chassis Speeds to set.
+     */
+    public void setChassisSpeeds(ChassisSpeeds chassisSpeeds)
+    {
+        swerveDrive.setChassisSpeeds(chassisSpeeds);
+    }
+
+    /**
+     * Post the trajectory to the field.
+     *
+     * @param trajectory The trajectory to post.
+     */
+    public void postTrajectory(Trajectory trajectory)
+    {
+        swerveDrive.postTrajectory(trajectory);
+    }
+
+
+    /**
+     * Sets the drive motors to brake/coast mode.
+     *
+     * @param brake True to set motors to brake mode, false for coast.
+     */
+    public void setMotorBrake(boolean brake)
+    {
+        swerveDrive.setMotorIdleMode(brake);
+    }
+
+
+    /**
+     * Get the chassis speeds based on controller input of 2 joysticks. One for speeds in which direction. The other for
+     * the angle of the robot.
+     *
+     * @param xInput   X joystick input for the robot to move in the X direction.
+     * @param yInput   Y joystick input for the robot to move in the Y direction.
+     * @param headingX X joystick which controls the angle of the robot.
+     * @param headingY Y joystick which controls the angle of the robot.
+     * @return {@link ChassisSpeeds} which can be sent to th Swerve Drive.
+     */
+    public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, double headingX, double headingY)
+    {
+        xInput = Math.pow(xInput, 3);
+        yInput = Math.pow(yInput, 3);
+        return swerveDrive.swerveController.getTargetSpeeds(xInput, yInput, headingX, headingY, getHeading().getRadians());
+    }
+
+
+    /**
+     * Gets the current velocity (x, y and omega) of the robot
+     *
+     * @return A {@link ChassisSpeeds} object of the current velocity
+     */
+    public ChassisSpeeds getRobotVelocity()
+    {
+        return swerveDrive.getRobotVelocity();
+    }
+
+
+
+    /**
+     * Lock the swerve drive to prevent it from moving.
+     */
+    public void lock()
+    {
+        swerveDrive.lockPose();
+    }
+
+    /**
+     * Gets the current pitch angle of the robot, as reported by the imu.
+     *
+     * @return The heading as a {@link Rotation2d} angle
+     */
+    public Rotation2d getPitch()
+    {
+        return swerveDrive.getPitch();
+    }
+
 
 
 
