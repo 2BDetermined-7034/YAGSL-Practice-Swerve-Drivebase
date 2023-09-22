@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoPathFactory;
+import frc.robot.commands.Auto.AutoFactory;
+import frc.robot.commands.Auto.Autos;
 import frc.robot.commands.drive.AbsoluteFieldDrive;
 import frc.robot.commands.drive.ControllerDrive;
 import frc.robot.commands.drive.TeleopDrive;
@@ -74,6 +75,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoPathFactory.testAuto(drivebase);
+    return AutoFactory.getAuto(drivebase);
   }
 }

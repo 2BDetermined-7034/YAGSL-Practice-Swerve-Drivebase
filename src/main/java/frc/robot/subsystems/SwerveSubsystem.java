@@ -9,11 +9,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,7 +30,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
 
-public class SwerveSubsystem extends SubsystemBase {
+public class SwerveSubsystem extends Subsystem {
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
     SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
@@ -105,6 +106,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
     {
         swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
+    }
+    public ChassisSpeeds getChassisSpeeds() {
+        return swerveDrive.getFieldVelocity();
     }
     public SwerveDriveKinematics getKinematics() {
         return swerveDrive.kinematics; 
@@ -267,6 +271,11 @@ public class SwerveSubsystem extends SubsystemBase {
     {
         return swerveDrive.getPitch();
     }
+
+    public void setModuleStates(SwerveModuleState[] states) {
+        swerveDrive.setModuleStates(states, true);
+    }
+
 
 
 
