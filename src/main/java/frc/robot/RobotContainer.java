@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -27,6 +28,7 @@ import java.io.IOException;
 public class RobotContainer {
 
   public static final PS4Controller driverController = new PS4Controller(0);
+  public static final XboxController logiController = new XboxController(1);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
 
   public static final TeleopDrive teleopDrive = new TeleopDrive(drivebase,
@@ -45,11 +47,12 @@ public class RobotContainer {
           false);
 
   private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2), 0.1), true);
+  private static final ControllerDrive controlDriveLogi = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(logiController.getLeftX() / 2, 0.1), () -> MathUtil.applyDeadband(logiController.getLeftY() / 2, 0.1), () -> MathUtil.applyDeadband(logiController.getRawAxis(4), 0.1), true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
     // Configure the trigger bindings
-    drivebase.setDefaultCommand(controlDrive);
+    drivebase.setDefaultCommand(controlDriveLogi);
     configureBindings();
   }
 
