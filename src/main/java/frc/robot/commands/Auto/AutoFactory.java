@@ -10,7 +10,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoFactory {
 
     public static Command getAuto(SwerveSubsystem drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("Test", new PathConstraints(3, 3));
+        PathPlannerTrajectory path = PathPlanner.loadPath("Test", new PathConstraints(2, 2));
 
         return new PathFactory(drive, path, true).getCommand();
     }

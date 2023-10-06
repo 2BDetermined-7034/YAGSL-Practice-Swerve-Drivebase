@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -17,7 +18,7 @@ import swervelib.SwerveController;
 /**
  * An example command that uses an example subsystem.
  */
-public class TeleopDrive extends Command
+public class TeleopDrive extends CommandBase
 {
 
     private final SwerveSubsystem swerve;

@@ -36,9 +36,9 @@ public class PathFactory {
                         path,
                         m_swerveDrive::getPosition, // Pose supplier
                         m_swerveDrive.getKinematics(), // SwerveDriveKinematics
-                        new PIDController(0.1, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                        new PIDController(0.1, 0, 0), // Y controller (usually the same values as X controller)
-                        new PIDController(0.1, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                        new PIDController(0.01, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                        new PIDController(0.01, 0, 0), // Y controller (usually the same values as X controller)
+                        new PIDController(0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                         m_swerveDrive::setModuleStates, // Module states consumer
                         m_swerveDrive // Requires this drive subsystem
                 )

@@ -2,12 +2,13 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.SwerveController;
 
 import java.util.function.DoubleSupplier;
 
-public class ControllerDrive extends Command {
+public class ControllerDrive extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
     private final DoubleSupplier x;
     private final DoubleSupplier y;

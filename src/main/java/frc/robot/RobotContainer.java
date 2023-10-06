@@ -47,11 +47,12 @@ public class RobotContainer {
           false);
 
   private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2), 0.1), true);
-  private static final ControllerDrive controlDriveLogi = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(logiController.getLeftX() / 2, 0.1), () -> MathUtil.applyDeadband(logiController.getLeftY() / 2, 0.1), () -> MathUtil.applyDeadband(logiController.getRawAxis(4), 0.1), true);
+  private static final ControllerDrive controlDriveLogi = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(logiController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(logiController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(logiController.getRawAxis(4) / 1.5, 0.1), true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
     // Configure the trigger bindings
+    // drivebase.setDefaultCommand(controlDriveLogi);
     drivebase.setDefaultCommand(controlDriveLogi);
     configureBindings();
   }
@@ -69,6 +70,8 @@ public class RobotContainer {
 
     new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
     new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
+    new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
+    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock)); 
   }
 
   /**

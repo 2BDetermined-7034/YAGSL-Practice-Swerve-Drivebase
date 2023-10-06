@@ -3,8 +3,9 @@ package frc.robot.commands.photonvision;
 import edu.wpi.first.math.geometry.Translation2d;
 import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class AprilTag extends Command {
+public class AprilTag extends CommandBase {
     // Change this to match the name of your camera
     private final PhotonCamera camera = new PhotonCamera("photonvision");
 

@@ -4,9 +4,10 @@ import org.photonvision.PhotonCamera;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class DriveToAprilTag extends Command {
+public class DriveToAprilTag extends CommandBase {
     // Change this to match the name of the camera
     private final PhotonCamera camera = new PhotonCamera("photonvision");
 

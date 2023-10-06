@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -30,7 +32,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
 
-public class SwerveSubsystem extends Subsystem {
+public class SwerveSubsystem extends SubsystemBase {
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
     SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
@@ -81,7 +83,7 @@ public class SwerveSubsystem extends Subsystem {
      * the {@link #getInstance()} method to get the singleton instance.
      */
     public SwerveSubsystem() throws IOException {
-        SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH;
+        // SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH; telemetry
         field2d = new Field2d();
         estimator = new SwerveDrivePoseEstimator(
                 m_kinematics,
