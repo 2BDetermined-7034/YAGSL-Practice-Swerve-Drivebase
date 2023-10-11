@@ -46,14 +46,14 @@ public class RobotContainer {
           () -> -driverController.getRawAxis(2),
           false);
 
-  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2), 0.1), true);
+  private static final ControllerDrive controlDrive = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(driverController.getRawAxis(2) / 1.5, 0.1), true);
   private static final ControllerDrive controlDriveLogi = new ControllerDrive(drivebase, () -> MathUtil.applyDeadband(logiController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(logiController.getLeftY(), 0.1), () -> MathUtil.applyDeadband(logiController.getRawAxis(4) / 1.5, 0.1), true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
     // Configure the trigger bindings
     // drivebase.setDefaultCommand(controlDriveLogi);
-    drivebase.setDefaultCommand(controlDriveLogi);
+    drivebase.setDefaultCommand(controlDrive);
     configureBindings();
   }
 
@@ -81,6 +81,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return AutoFactory.getAuto(drivebase);
+    // return AutoFactory.runTestAutoForwardOnly(drivebase);
+
+    return new ControllerDrive(drivebase, () -> 0, () -> 0, () -> 0, true);
   }
 }
