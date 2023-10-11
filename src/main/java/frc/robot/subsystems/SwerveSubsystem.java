@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.SubsystemLogging;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,20 +33,14 @@ import edu.wpi.first.math.geometry.Translation2d;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
 
-public class SwerveSubsystem extends SubsystemBase {
+public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
 
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve/neo");
     SwerveDrive swerveDrive  = new SwerveParser(swerveJsonDirectory).createSwerveDrive();
     private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
 
     private final Field2d field2d;
-    private SwerveDrivePoseEstimator estimator;
-    private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-            new Translation2d(24 / 2.0, 24 / 2.0), // 24 is the length and width
-            new Translation2d(24 / 2.0, -24 / 2.0),
-            new Translation2d(-24 / 2.0, 24 / 2.0),
-            new Translation2d(-24 / 2.0, -24 / 2.0)
-    );
+    private final SwerveDrivePoseEstimator estimator;
 
 
     // With eager singleton initialization, any static variables/fields used in the 
@@ -85,6 +80,13 @@ public class SwerveSubsystem extends SubsystemBase {
     public SwerveSubsystem() throws IOException {
         // SwerveDriveTelemetry.verbosity = SwerveDriveTelemetry.TelemetryVerbosity.HIGH; telemetry
         field2d = new Field2d();
+        // 24 is the length and width
+        SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+                new Translation2d(24 / 2.0, 24 / 2.0), // 24 is the length and width
+                new Translation2d(24 / 2.0, -24 / 2.0),
+                new Translation2d(-24 / 2.0, 24 / 2.0),
+                new Translation2d(-24 / 2.0, -24 / 2.0)
+        );
         estimator = new SwerveDrivePoseEstimator(
                 m_kinematics,
                 getGyroscopeRotation(),
@@ -118,6 +120,10 @@ public class SwerveSubsystem extends SubsystemBase {
     public void zeroGyro() {
         swerveDrive.zeroGyro();
     }
+    public float getNavxYaw() { return m_navx.getYaw(); }
+    public float getNavxPitch() { return m_navx.getPitch(); }
+
+
     public SwerveController getSwerveController() {
         return swerveDrive.getSwerveController();
     }
@@ -278,7 +284,11 @@ public class SwerveSubsystem extends SubsystemBase {
         swerveDrive.setModuleStates(states, true);
     }
 
-
+    private void logger() {
+        log("Pose2D", getPose());
+        log("Current Module Positions", swerveDrive.getModulePositions());
+        log("Chassis Speeds", getChassisSpeeds());
+    }
 
 
 

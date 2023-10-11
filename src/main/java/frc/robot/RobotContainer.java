@@ -69,9 +69,11 @@ public class RobotContainer {
   private void configureBindings() {
 
     new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
+//    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
+    new Trigger(driverController::getCrossButton).onTrue(drivebase.runOnce(drivebase::lock));
+
     new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock)); 
+    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock));
   }
 
   /**
@@ -81,8 +83,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // return AutoFactory.runTestAutoForwardOnly(drivebase);
+     return AutoFactory.runTestAutoForwardOnly(drivebase);
 
-    return new ControllerDrive(drivebase, () -> 0, () -> 0, () -> 0, true);
+//    return new ControllerDrive(drivebase, () -> 0, () -> 0, () -> 0, true);
   }
 }
