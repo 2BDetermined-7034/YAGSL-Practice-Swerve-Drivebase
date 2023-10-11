@@ -16,6 +16,12 @@ public class AutoFactory {
         return new PathFactory(drive, path, true).getCommand();
     }
 
+    public static Command testCurvedAuto(SwerveSubsystem drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("Curved Path", new PathConstraints(1,1));
+
+        return new PathFactory(drive, path, true).getCommand();
+    }
+
 
 
 }

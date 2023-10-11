@@ -99,12 +99,12 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Fieldx", swerveDrive.getFieldVelocity().vxMetersPerSecond);
-        SmartDashboard.putNumber("Fieldy", swerveDrive.getFieldVelocity().vyMetersPerSecond);
+//        SmartDashboard.putNumber("Fieldx", swerveDrive.getFieldVelocity().vxMetersPerSecond);
+//        SmartDashboard.putNumber("Fieldy", swerveDrive.getFieldVelocity().vyMetersPerSecond);
+//
+//        SmartDashboard.putNumber("Fieldo", swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
 
-        SmartDashboard.putNumber("Fieldo", swerveDrive.getFieldVelocity().omegaRadiansPerSecond);
-
-        swerveDrive.updateOdometry();
+//        swerveDrive.updateOdometry();
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)

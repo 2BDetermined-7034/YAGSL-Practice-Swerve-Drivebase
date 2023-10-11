@@ -7,7 +7,10 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auto.AutoFactory;
@@ -30,6 +33,7 @@ public class RobotContainer {
   public static final PS4Controller driverController = new PS4Controller(0);
   public static final XboxController logiController = new XboxController(1);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
+  private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public static final TeleopDrive teleopDrive = new TeleopDrive(drivebase,
           driverController::getLeftX, driverController::getLeftY,
@@ -51,6 +55,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
+    chooser.addOption("Straight Auto", AutoFactory.runTestAutoForwardOnly(drivebase));
+    chooser.addOption("Test Curved Auto", AutoFactory.testCurvedAuto(drivebase));
+    chooser.setDefaultOption("Do nothing", new WaitCommand(1));
+
+    SmartDashboard.putData("Auto",chooser);
+
+
     // Configure the trigger bindings
     // drivebase.setDefaultCommand(controlDriveLogi);
     drivebase.setDefaultCommand(controlDrive);
@@ -83,8 +94,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-     return AutoFactory.runTestAutoForwardOnly(drivebase);
-
+//     return AutoFactory.runTestAutoForwardOnly(drivebase);
 //    return new ControllerDrive(drivebase, () -> 0, () -> 0, () -> 0, true);
+    return chooser.getSelected();
   }
 }
