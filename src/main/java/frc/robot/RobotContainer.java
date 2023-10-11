@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Auto.AutoFactory;
-import frc.robot.commands.Auto.Autos;
 import frc.robot.commands.drive.AbsoluteFieldDrive;
 import frc.robot.commands.drive.ControllerDrive;
 import frc.robot.commands.drive.TeleopDrive;
@@ -30,8 +29,8 @@ import java.io.IOException;
  */
 public class RobotContainer {
 
-  public static final PS4Controller driverController = new PS4Controller(0);
-  public static final XboxController logiController = new XboxController(1);
+  public static final PS4Controller driverController = new PS4Controller(Constants.ControllerConstants.ps5Controller);
+  public static final XboxController logiController = new XboxController(Constants.ControllerConstants.logitechController);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -80,7 +79,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-//    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
+    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
     new Trigger(driverController::getCrossButton).onTrue(drivebase.runOnce(drivebase::lock));
 
     new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));

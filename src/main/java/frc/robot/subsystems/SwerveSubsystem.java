@@ -286,8 +286,10 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
 
     private void logger() {
         log("Pose2D", getPose());
+        log("Position", getPosition());
         log("Current Module Positions", swerveDrive.getModulePositions());
-        log("Chassis Speeds", getChassisSpeeds());
+        log("Field Velocity", getChassisSpeeds());
+        log("Robot Velocity", getRobotVelocity());
     }
 
 
