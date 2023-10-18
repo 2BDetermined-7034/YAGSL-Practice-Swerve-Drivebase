@@ -2,13 +2,15 @@ package frc.robot.commands.photonvision;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import org.photonvision.PhotonCamera;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.SwerveSubsystem;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-public class DriveToAprilTagPID extends Command {
+public class DriveToAprilTagPID extends CommandBase {
     private final PhotonCamera camera = new PhotonCamera("photonvision");
     private final PIDController distanceController = new PIDController(0.1, 0.0, 0.0);
     SwerveSubsystem swerveDrive;

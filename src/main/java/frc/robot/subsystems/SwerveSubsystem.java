@@ -122,6 +122,9 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
     }
     public float getNavxYaw() { return m_navx.getYaw(); }
     public float getNavxPitch() { return m_navx.getPitch(); }
+    public SwerveDrivePoseEstimator getEstimator() {
+        return estimator;
+    }
 
 
     public SwerveController getSwerveController() {
