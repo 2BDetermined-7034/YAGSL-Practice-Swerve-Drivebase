@@ -71,7 +71,7 @@ public class PoseEstimator {
         }
     }
     public Translation2d estimateVelocity() {
-        Pose2d currentPose = estimatePose();
+        Pose2d currentPose = estimatePoseWithCamera();
         double currentTimestamp = Timer.getFPGATimestamp();
 
         if (poseHistory.getInternalBuffer().size() < 2) {
