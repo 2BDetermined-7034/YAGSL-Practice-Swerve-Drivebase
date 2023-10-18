@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +34,7 @@ public class RobotContainer {
   public static final XboxController logiController = new XboxController(Constants.ControllerConstants.logitechController);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
+  public static Field2d field = new Field2d();
 
   public static final TeleopDrive teleopDrive = new TeleopDrive(drivebase,
           driverController::getLeftX, driverController::getLeftY,
