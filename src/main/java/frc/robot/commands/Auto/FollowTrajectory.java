@@ -3,7 +3,7 @@ package frc.robot.commands.Auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.Auton;
+import frc.robot.Constants.Constants.Auton;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class FollowTrajectory extends SequentialCommandGroup

@@ -30,6 +30,7 @@ public class DriveToAprilTagPID extends CommandBase {
             double desiredDistance = 2.0;
             double speed = distanceController.calculate(currentDistance, desiredDistance);
             double yaw = result.getBestTarget().getYaw();
+
             swerveDrive.drive(translation.rotateBy(new Rotation2d(speed)), yaw, false, false);
         }
 

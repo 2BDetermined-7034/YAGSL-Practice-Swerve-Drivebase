@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +18,8 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
+import static edu.wpi.first.wpilibj.RobotBase.isReal;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -37,8 +40,6 @@ public class Robot extends LoggedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-
-    Logger.getInstance().recordMetadata("Yaggy", "Yagga"); // Set a metadata value
 
 if (isReal()) {
     Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
@@ -75,6 +76,7 @@ Logger.getInstance().start(); // Start logging! No more data receivers, replay s
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    NetworkTableInstance.getDefault().flush();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
