@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Limelight;
+package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
@@ -41,20 +41,21 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
 
-//        getPipeSub = limeLightTable.getIntegerTopic("getpipe").subscribe(0);
-//
-//        tx = limeLightTable.getDoubleTopic("tx").subscribe(0); // Horizontal offset from crosshair to target (-29.8 to 29.8 degrees).
-//        ty = limeLightTable.getDoubleTopic("ty").subscribe(0); // Vertical offset from crosshair to target (-24.85 to 24.85 degrees).
-//        tv = limeLightTable.getDoubleTopic("tv").subscribe(0); // Whether the limelight has any valid targets (0 or 1).
-//        ta = limeLightTable.getDoubleTopic("ta").subscribe(0); // Target area (0% of image to 100% of image).
-//        tid = limeLightTable.getIntegerTopic("tid").subscribe(0);
-//        tl = limeLightTable.getIntegerTopic("tl").subscribe(999);
+
+        getPipeSub = limeLightTable.getIntegerTopic("getpipe").subscribe(0);
+
+        tx = limeLightTable.getDoubleTopic("tx").subscribe(0); // Horizontal offset from crosshair to target (-29.8 to 29.8 degrees).
+        ty = limeLightTable.getDoubleTopic("ty").subscribe(0); // Vertical offset from crosshair to target (-24.85 to 24.85 degrees).
+        tv = limeLightTable.getDoubleTopic("tv").subscribe(0); // Whether the limelight has any valid targets (0 or 1).
+        ta = limeLightTable.getDoubleTopic("ta").subscribe(0); // Target area (0% of image to 100% of image).
+        tid = limeLightTable.getIntegerTopic("tid").subscribe(0);
+        tl = limeLightTable.getIntegerTopic("tl").subscribe(999);
 //        camTran = limeLightTable.getDoubleArrayTopic("camTran").subscribe(new double[]{});
 //        ledModeSub = limeLightTable.getIntegerTopic("ledMode").subscribe(0); // limelight's LED state (0-3).
 //        camModeSub = limeLightTable.getIntegerTopic("camMode").subscribe(0); // limelight's operation mode (0-1).
 //        botpose = limeLightTable.getDoubleArrayTopic("botpose").subscribe(new double[]{});
-//
-//
+
+
 //        ledModePub = limeLightTable.getIntegerTopic("ledMode").publish();
 //        camModePub = limeLightTable.getIntegerTopic("camMode").publish();
 //        getpipePub = limeLightTable.getIntegerTopic("getpipe").publish();
@@ -112,6 +113,10 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
      */
     public double getTargetArea() {
         return ta.get(0.0);
+    }
+
+    public boolean targetFound() {
+        return ta.get(0.0) > 0.0;
     }
 
     public Optional<Double> getTapeDistance() {
