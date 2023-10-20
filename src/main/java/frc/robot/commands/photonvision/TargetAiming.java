@@ -13,6 +13,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import java.time.format.DecimalStyle;
 import java.util.Arrays;
 
 
@@ -20,7 +21,7 @@ public class TargetAiming extends CommandBase implements SubsystemLogging {
     private final SwerveSubsystem swerveSubsystem;
     private PhotonCamera camera;
     ShuffleboardTab photonVisionTab = Shuffleboard.getTab("PhotonVision");
-    GenericEntry targetFound;
+    GenericEntry targetFound, desiredID, x, y;
 
 
 
@@ -36,8 +37,11 @@ public class TargetAiming extends CommandBase implements SubsystemLogging {
      */
     @Override
     public void initialize() {
-        camera = new PhotonCamera("photonvision");
+        camera = new PhotonCamera("HD_Webcam_C615");
         targetFound = Shuffleboard.getTab("PhotonVision").add("Target Found", false).getEntry();
+        desiredID = Shuffleboard.getTab("PhotonVision").add("Desired ID?", false).getEntry();
+        x = Shuffleboard.getTab("PhotonVision").add("X", 0.0).getEntry();
+        y = Shuffleboard.getTab("PhotonVision").add("Y", 0.0).getEntry();
     }
 
     /**
@@ -49,16 +53,18 @@ public class TargetAiming extends CommandBase implements SubsystemLogging {
         PhotonPipelineResult result = camera.getLatestResult();
 
         if (result.hasTargets()) {
+            targetFound.setBoolean(result.hasTargets());
             // Define your array of desired AprilTag IDs
-            int[] desiredAprilTagIds = {1,2,5};
+            int[] desiredAprilTagIds = {1,2,3,4};
 
             // Check if the detected AprilTag's ID is in your array
             int detectedAprilTagId = result.getBestTarget().getFiducialId();
 
             boolean idIsDesired = Arrays.stream(desiredAprilTagIds).anyMatch(id -> id == detectedAprilTagId);
-            photonVisionTab.addBoolean("ID is desired", () -> idIsDesired);
 
             if (idIsDesired) {
+                desiredID.setBoolean(true);
+
                 Transform3d transform3D = result.getBestTarget().getBestCameraToTarget();
 
                 Translation2d translation = new Translation2d(transform3D.getTranslation().getX(), transform3D.getTranslation().getY());
@@ -77,30 +83,24 @@ public class TargetAiming extends CommandBase implements SubsystemLogging {
                     log("PhotonVision rotation", rotation);
                     log("PhotonVision transform3D", transform3D);
                     log("PhotonVision result", result);
+                    log("PhotonVision X", translation.getX());
+                    log("PhotonVision Y", translation.getY());
 
-                    setTargetFound(true);
-                    addDouble("x", translation.getX());
-                    addDouble("y", translation.getY());
-//                    photonVisionTab.addDouble("X", translation::getX);
-//                    photonVisionTab.addDouble("Y", translation::getY);
+                    targetFound.setBoolean(true);
 
-                    swerveSubsystem.drive(translation, rotation.getRadians(), false, false);
+                    x.setDouble(translation.getX());
+                    y.setDouble(translation.getY());
+
+
+
+//                    swerveSubsystem.drive(translation, rotation.getRadians(), false, false);
                 } else {
-                    setTargetFound(false);
+                    desiredID.setBoolean(false);
                 }
             }
         } else {
-            setTargetFound(false);
+            targetFound.setBoolean(false);
         }
-    }
-
-
-    private void setTargetFound(boolean found) {
-        targetFound.setBoolean(found);
-    }
-
-    private void addDouble(String name, double entry) {
-        photonVisionTab.addDouble(name, () -> entry);
     }
 
 

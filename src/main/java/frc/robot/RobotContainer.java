@@ -19,6 +19,7 @@ import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.drive.AbsoluteFieldDrive;
 import frc.robot.commands.drive.ControllerDrive;
 import frc.robot.commands.drive.TeleopDrive;
+import frc.robot.commands.photonvision.TargetAiming;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.IOException;
@@ -64,9 +65,8 @@ public class RobotContainer {
     SmartDashboard.putData("Auto",chooser);
 
 
-    // Configure the trigger bindings
     // drivebase.setDefaultCommand(controlDriveLogi);
-    drivebase.setDefaultCommand(controlDrive);
+//    drivebase.setDefaultCommand(controlDrive);
     configureBindings();
   }
 
@@ -81,12 +81,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
-    new Trigger(driverController::getCrossButton).onTrue(drivebase.runOnce(drivebase::lock));
+//    new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
+//    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
+//    new Trigger(driverController::getCrossButton).onTrue(drivebase.runOnce(drivebase::lock));
+//
+//    new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
+//    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock));
 
-    new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock));
+
+    new Trigger(driverController::getCircleButton).toggleOnTrue(new TargetAiming(drivebase));
   }
 
   /**
