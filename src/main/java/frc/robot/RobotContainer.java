@@ -16,10 +16,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Constants;
 import frc.robot.commands.Auto.AutoFactory;
+import frc.robot.commands.Limelight.LimelightAlign;
 import frc.robot.commands.drive.AbsoluteFieldDrive;
 import frc.robot.commands.drive.ControllerDrive;
 import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.commands.photonvision.TargetAiming;
+import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.IOException;
@@ -35,6 +37,7 @@ public class RobotContainer {
   public static final PS4Controller driverController = new PS4Controller(Constants.ControllerConstants.ps5Controller);
   public static final XboxController logiController = new XboxController(Constants.ControllerConstants.logitechController);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
+  public static final LimeLight limelight = new LimeLight();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
   public static Field2d field = new Field2d();
 
@@ -65,8 +68,9 @@ public class RobotContainer {
     SmartDashboard.putData("Auto",chooser);
 
 
+
     // drivebase.setDefaultCommand(controlDriveLogi);
-//    drivebase.setDefaultCommand(controlDrive);
+    drivebase.setDefaultCommand(controlDrive);
     configureBindings();
   }
 
@@ -88,8 +92,7 @@ public class RobotContainer {
 //    new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
 //    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock));
 
-
-    new Trigger(driverController::getCircleButton).toggleOnTrue(new TargetAiming(drivebase));
+    new Trigger(driverController::getCircleButton).toggleOnTrue(new LimelightAlign(drivebase, limelight));
   }
 
   /**

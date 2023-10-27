@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Constants;
 import frc.robot.SubsystemLogging;
 
 import java.util.Optional;
@@ -33,6 +35,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     private static IntegerSubscriber ledModeSub;
     private static DoublePublisher distance;
 
+
     /**
      * Creates a new LimeLight.
      */
@@ -50,6 +53,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         ta = limeLightTable.getDoubleTopic("ta").subscribe(0); // Target area (0% of image to 100% of image).
         tid = limeLightTable.getIntegerTopic("tid").subscribe(0);
         tl = limeLightTable.getIntegerTopic("tl").subscribe(999);
+
 //        camTran = limeLightTable.getDoubleArrayTopic("camTran").subscribe(new double[]{});
 //        ledModeSub = limeLightTable.getIntegerTopic("ledMode").subscribe(0); // limelight's LED state (0-3).
 //        camModeSub = limeLightTable.getIntegerTopic("camMode").subscribe(0); // limelight's operation mode (0-1).
@@ -66,7 +70,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        getTapeDistance().ifPresent((dist) -> distance.set(dist));
+//        getTapeDistance().ifPresent((dist) -> distance.set(dist));
         updateLogging();
     }
 
@@ -97,6 +101,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         return ty.get(0.0);
     }
 
+
     /**
      * Get whether a target is detected.
      *
@@ -104,6 +109,10 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
      */
     public boolean isTargetAvailable() {
         return tv.get() == 1;
+    }
+
+    public PIDController pid() {
+        return new PIDController(0.1,0.01,0);
     }
 
     /**
@@ -120,17 +129,14 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     }
 
     public Optional<Double> getTapeDistance() {
-//        double targetOffsetAngle = ty.get(-1);
-//
-//        double angleToGoalRadians = Units.degreesToRadians(Vision.limeLightMountAngleDegrees + targetOffsetAngle);
-//        if (isTargetAvailable()) {
-//            return Optional.of(Vision.goalHeighInches - Vision.limeligtLensHeighInches / (Math.tan(angleToGoalRadians)));
-//
-//        }
-//        return Optional.empty();
+        double targetOffsetAngle = ty.get(-1);
 
-        return null;
+        double angleToGoalRadians = Units.degreesToRadians(Constants.Vision.limeLightMountAngleDegrees + targetOffsetAngle);
+        if (isTargetAvailable()) {
+            return Optional.of(Constants.Vision.goalHeighInches - Constants.Vision.limeligtLensHeighInches / (Math.tan(angleToGoalRadians)));
 
+        }
+        return Optional.empty();
     }
 
     /**

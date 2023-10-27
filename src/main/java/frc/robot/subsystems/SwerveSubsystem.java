@@ -13,8 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.SubsystemLogging;
 
@@ -23,14 +21,11 @@ import java.io.IOException;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import swervelib.SwerveController;
-import swervelib.SwerveModule;
-import swervelib.imu.NavXSwerve;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.SwerveDrive;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import swervelib.telemetry.SwerveDriveTelemetry;
 
 
 public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
@@ -111,6 +106,11 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
     {
         swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
     }
+
+    public Rotation2d getAngle() {
+        return swerveDrive.getYaw();
+    }
+
     public ChassisSpeeds getChassisSpeeds() {
         return swerveDrive.getFieldVelocity();
     }
