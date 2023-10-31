@@ -107,6 +107,12 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
         swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
     }
 
+    public void rotate(double rotation) {
+        Translation2d currentTranslation = swerveDrive.getPose().getTranslation();
+
+        swerveDrive.drive(currentTranslation, rotation, false, true);
+    }
+
     public Rotation2d getAngle() {
         return swerveDrive.getYaw();
     }

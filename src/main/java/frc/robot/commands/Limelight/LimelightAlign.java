@@ -49,7 +49,8 @@ public class LimelightAlign extends CommandBase implements SubsystemLogging {
             log("At Setpoint", pid.atSetpoint());
 
 
-            swerve.drive(new Translation2d(0, 0), output, false, true);
+//            swerve.drive(new Translation2d(0, 0), output, false, true);
+            swerve.rotate(output);
         }
 
     }
