@@ -14,6 +14,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+
 import frc.robot.SubsystemLogging;
 
 import java.io.File;
@@ -110,7 +112,7 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
     public void rotate(double rotation) {
         Translation2d currentTranslation = swerveDrive.getPose().getTranslation();
 
-        swerveDrive.drive(currentTranslation, rotation, false, true);
+        swerveDrive.drive(currentTranslation, rotation, true, true);
     }
 
     public Rotation2d getAngle() {

@@ -19,9 +19,13 @@ import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Limelight.LimelightAlign;
 import frc.robot.commands.drive.AbsoluteFieldDrive;
 import frc.robot.commands.drive.ControllerDrive;
+import frc.robot.commands.drive.LimelightDrive;
 import frc.robot.commands.drive.TeleopDrive;
+import frc.robot.commands.photonvision.AprilTag;
+import frc.robot.commands.photonvision.DriveToAprilTagPID;
 import frc.robot.commands.photonvision.TargetAiming;
 import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.IOException;
@@ -39,6 +43,7 @@ public class RobotContainer {
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
   public static final LimeLight limelight = new LimeLight();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
+  private final PhotonVisionSubsystem photon = new PhotonVisionSubsystem();
   public static Field2d field = new Field2d();
 
   public static final TeleopDrive teleopDrive = new TeleopDrive(drivebase,
@@ -61,16 +66,17 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() throws IOException {
-    chooser.addOption("Straight Auto", AutoFactory.runTestAutoForwardOnly(drivebase));
-    chooser.addOption("Test Curved Auto", AutoFactory.testCurvedAuto(drivebase));
-    chooser.setDefaultOption("Do nothing", new WaitCommand(1));
-
-    SmartDashboard.putData("Auto",chooser);
+//    chooser.addOption("Straight Auto", AutoFactory.runTestAutoForwardOnly(drivebase));
+//    chooser.addOption("Test Curved Auto", AutoFactory.testCurvedAuto(drivebase));
+//    chooser.setDefaultOption("Do nothing", new WaitCommand(1));
+//
+//    SmartDashboard.putData("Auto",chooser);
 
 
 
     // drivebase.setDefaultCommand(controlDriveLogi);
     drivebase.setDefaultCommand(controlDrive);
+//    photon.setDefaultCommand(new AprilTag(photon));
     configureBindings();
   }
 
@@ -85,14 +91,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-//    new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-//    new Trigger(driverController::getCircleButton).whileTrue(drivebase.run(drivebase::goToZero));
-//    new Trigger(driverController::getCrossButton).onTrue(drivebase.runOnce(drivebase::lock));
-//
-//    new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
-//    new Trigger(logiController::getAButton).onTrue(drivebase.runOnce(drivebase::lock));
+    new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
 
-    new Trigger(driverController::getCircleButton).toggleOnTrue(new LimelightAlign(drivebase, limelight));
+//    new Trigger(driverController::getCircleButton).toggleOnTrue(new LimelightDrive(drivebase, limelight, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1)));
+
+    new Trigger(driverController::getSquareButton).toggleOnTrue(new DriveToAprilTagPID(drivebase, photon));
+
   }
 
   /**
