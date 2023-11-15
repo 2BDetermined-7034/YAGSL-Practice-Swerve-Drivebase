@@ -7,6 +7,7 @@ import frc.robot.SubsystemLogging;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 
+import java.util.Timer;
 import java.util.function.DoubleSupplier;
 
 
@@ -16,7 +17,6 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
     private PIDController pid;
     DoubleSupplier x;
     DoubleSupplier y;
-
     public LimelightDrive(SwerveSubsystem swerve, LimeLight limeLight, DoubleSupplier x, DoubleSupplier y) {
         this.x = x;
         this.y = y;
@@ -48,13 +48,31 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
             double output = -pid.calculate(tx);
 
 
+
+
+            double targetVert = limeLight.getVert();
+            double targetHor = limeLight.getHor();
+            double aspectRatio = limeLight.aspectRatio(targetHor,targetVert);
+
+
+            if(aspectRatio > 3.5) {
+                log("Is Blue", true);
+            } else log("Is Blue", false);
+
+            if(aspectRatio < 3.4) log("Is Red", true); else log("Is Red", false);
+
+
             log("PID output", output);
             log("Current Angle", currentAngle);
             log("TX", tx);
             log("At Setpoint", pid.atSetpoint());
+            log("Horizontal", targetHor);
+            log("Verticle", targetVert);
+
+            log("Aspect Ratio", aspectRatio);
 
 
-            swerve.drive(new Translation2d(y.getAsDouble(),x.getAsDouble()), output, true, true);
+            swerve.drive(new Translation2d(y.getAsDouble(),x.getAsDouble()), 0, true, true);
         }
 
     }

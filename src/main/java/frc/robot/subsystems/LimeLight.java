@@ -27,6 +27,8 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     private static DoubleSubscriber ta;
     private static IntegerSubscriber tid;
     private static IntegerSubscriber tl;
+    private static IntegerSubscriber thor;
+    private static IntegerSubscriber tvert;
     private static DoubleArraySubscriber camTran;
     private static DoubleArraySubscriber botpose;
     private static IntegerPublisher camModePub;
@@ -53,6 +55,8 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         ta = limeLightTable.getDoubleTopic("ta").subscribe(0); // Target area (0% of image to 100% of image).
         tid = limeLightTable.getIntegerTopic("tid").subscribe(0);
         tl = limeLightTable.getIntegerTopic("tl").subscribe(999);
+        thor = limeLightTable.getIntegerTopic("thor").subscribe(0);
+        tvert = limeLightTable.getIntegerTopic("tvert").subscribe(0);
 
 //        camTran = limeLightTable.getDoubleArrayTopic("camTran").subscribe(new double[]{});
 //        ledModeSub = limeLightTable.getIntegerTopic("ledMode").subscribe(0); // limelight's LED state (0-3).
@@ -81,6 +85,25 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
      */
     public long getActivePipeLine() {
         return getPipeSub.get();
+    }
+
+    public double getVert() {
+        return (double) tvert.get();
+    }
+
+    public double getHor() { return (double) thor.get(); }
+
+    public long gcd(long a, long b) {
+        if(b == 0) {
+            return a;
+        } else return gcd(b, a % b);
+    }
+    public double aspectRatio(double thor, double tvert) {
+//        long r = gcd(thor, tvert);
+//        return (thor/r) + ":" + (tvert/r);
+
+
+        return (thor/tvert);
     }
 
     /**
