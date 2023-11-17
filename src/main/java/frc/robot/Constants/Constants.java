@@ -31,6 +31,10 @@ public final class Constants {
     public static final double limeLightMountAngleDegrees = 0;
     public static final double goalHeighInches = 53.75;
     public static final double limeligtLensHeighInches = 0;
+
+    public static final double limeLightHorizontalFOV = 59.6;
+    public static final double limeLightVerticalFOV = 49.7;
+    public static final double distanceScale = 1.0;
  }
 
   public static class FieldConstants {

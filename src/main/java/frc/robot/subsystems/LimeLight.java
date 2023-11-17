@@ -11,6 +11,9 @@ import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Constants;
 import frc.robot.SubsystemLogging;
+import frc.robot.utils.Distance;
+
+import frc.robot.Constants.Constants.Vision;
 
 import java.util.Optional;
 
@@ -36,6 +39,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     private static IntegerPublisher ledModePub;
     private static IntegerSubscriber ledModeSub;
     private static DoublePublisher distance;
+    private static Distance distanceCalculator;
 
 
     /**
@@ -45,7 +49,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
 
         NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-
+        distanceCalculator = new Distance(9.0, Constants.Vision.distanceScale, 2.0, Math.toRadians(frc.robot.Constants.Constants.Vision.limeLightHorizontalFOV), Math.toRadians(frc.robot.Constants.Constants.Vision.limeLightVerticalFOV));
 
         getPipeSub = limeLightTable.getIntegerTopic("getpipe").subscribe(0);
 
@@ -69,6 +73,10 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
 //        getpipePub = limeLightTable.getIntegerTopic("getpipe").publish();
 //        distance = limeLightTable.getDoubleTopic("distance").publish();
 
+    }
+
+    public double getTargetDistance() {
+        return distanceCalculator.getDistance(Math.toRadians(getTargetOffsetX()), Math.toRadians(getTargetOffsetY()));
     }
 
     @Override
@@ -324,6 +332,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         log("Latency", getLatency());
         log("Is Blue", getAspectRatio() > 3.5);
         log("Is Red", getAspectRatio() <= 3.5);
+        log("Distance", getTargetDistance());
     }
 
     private enum LEDMode {
