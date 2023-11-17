@@ -7,7 +7,6 @@ import frc.robot.SubsystemLogging;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.SwerveSubsystem;
 
-import java.util.Timer;
 import java.util.function.DoubleSupplier;
 
 
@@ -52,7 +51,7 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
 
             double targetVert = limeLight.getVert();
             double targetHor = limeLight.getHor();
-            double aspectRatio = limeLight.aspectRatio(targetHor,targetVert);
+            double aspectRatio = limeLight.calculateAspectRatio(targetHor,targetVert);
 
 
             if(aspectRatio > 3.5) {

@@ -73,6 +73,7 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
 
     @Override
     public void periodic() {
+
         // This method will be called once per scheduler run
 //        getTapeDistance().ifPresent((dist) -> distance.set(dist));
         updateLogging();
@@ -98,12 +99,16 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
             return a;
         } else return gcd(b, a % b);
     }
-    public double aspectRatio(double thor, double tvert) {
+    public double calculateAspectRatio(double thor, double tvert) {
 //        long r = gcd(thor, tvert);
 //        return (thor/r) + ":" + (tvert/r);
 
 
         return (thor/tvert);
+    }
+
+    public double getAspectRatio(){
+        return((double) thor.get() / (double) tvert.get());
     }
 
     /**
@@ -317,7 +322,8 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
         log("Target ID", getTargetID());
         log("Target Area", getTargetArea());
         log("Latency", getLatency());
-
+        log("Is Blue", getAspectRatio() > 3.5);
+        log("Is Red", getAspectRatio() <= 3.5);
     }
 
     private enum LEDMode {
