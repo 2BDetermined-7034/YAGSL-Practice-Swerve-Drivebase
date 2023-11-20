@@ -11,19 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Constants;
-import frc.robot.commands.Auto.AutoFactory;
-import frc.robot.commands.Limelight.LimelightAlign;
-import frc.robot.commands.drive.AbsoluteFieldDrive;
-import frc.robot.commands.drive.ControllerDrive;
-import frc.robot.commands.drive.LimelightDrive;
-import frc.robot.commands.drive.TeleopDrive;
-import frc.robot.commands.photonvision.AprilTag;
-import frc.robot.commands.photonvision.DriveToAprilTagPID;
-import frc.robot.commands.photonvision.TargetAiming;
+import frc.robot.commands.Limelight.LimelightDrive;
+import frc.robot.commands.drive.*;
+import frc.robot.subsystems.DigitalSensor;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -38,11 +31,13 @@ import java.io.IOException;
  */
 public class RobotContainer {
 
+  private static final DigitalSensor sensor = new DigitalSensor();
   public static final PS4Controller driverController = new PS4Controller(Constants.ControllerConstants.ps5Controller);
   public static final XboxController logiController = new XboxController(Constants.ControllerConstants.logitechController);
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
   public static final LimeLight limelight = new LimeLight();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
+  public final SendableChooser<String> teamChooser = new SendableChooser<>();
   private final PhotonVisionSubsystem photon = new PhotonVisionSubsystem();
   public static Field2d field = new Field2d();
 
@@ -71,12 +66,18 @@ public class RobotContainer {
 //    chooser.setDefaultOption("Do nothing", new WaitCommand(1));
 //
 //    SmartDashboard.putData("Auto",chooser);
+    teamChooser.addOption("Red Team", "red");
+    teamChooser.addOption("Blue Team", "blue");
 
+    SmartDashboard.putData("Team", teamChooser);
 
 
     // drivebase.setDefaultCommand(controlDriveLogi);
     drivebase.setDefaultCommand(controlDrive);
+    sensor.setDefaultCommand(new a(sensor));
 //    photon.setDefaultCommand(new AprilTag(photon));
+
+
     configureBindings();
   }
 

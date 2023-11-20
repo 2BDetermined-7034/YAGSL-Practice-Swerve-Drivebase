@@ -1,7 +1,9 @@
-package frc.robot.commands.drive;
+package frc.robot.commands.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.SubsystemLogging;
 import frc.robot.subsystems.LimeLight;
@@ -43,22 +45,12 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
             pid.setSetpoint(0);
             double currentAngle = swerve.getAngle().getDegrees();
 
-
             double output = -pid.calculate(tx);
-
-
-
-
             double targetVert = limeLight.getVert();
             double targetHor = limeLight.getHor();
             double aspectRatio = limeLight.calculateAspectRatio(targetHor,targetVert);
 
-
-            if(aspectRatio > 3.5) {
-                log("Is Blue", true);
-            } else log("Is Blue", false);
-
-            if(aspectRatio < 3.4) log("Is Red", true); else log("Is Red", false);
+            boolean target = isTarget(aspectRatio, false);
 
 
             log("PID output", output);
@@ -67,13 +59,41 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
             log("At Setpoint", pid.atSetpoint());
             log("Horizontal", targetHor);
             log("Verticle", targetVert);
-
+            log("Target", target);
             log("Aspect Ratio", aspectRatio);
 
 
-            swerve.drive(new Translation2d(y.getAsDouble(),x.getAsDouble()), 0, true, true);
+
+
+        if(target) swerve.drive(new Translation2d(y.getAsDouble(),x.getAsDouble()), 0, true, true);
+
         }
 
+    }
+
+    private static boolean isTarget(double aspectRatio, boolean override) {
+        boolean target = false;
+
+        if(override) {
+            target = true;
+            return target;
+        }
+
+        switch(DriverStation.getAlliance()) {
+            case Red:
+                // target blue
+
+                target = aspectRatio > 3.5;
+                break;
+
+            case Blue:
+                // target red
+
+              target = aspectRatio < 3.4;
+              break;
+
+        }
+        return target;
     }
 
 
