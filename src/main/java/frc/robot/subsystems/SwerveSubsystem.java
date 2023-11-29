@@ -2,7 +2,10 @@ package frc.robot.subsystems;
 
 
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -92,6 +95,22 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
                 VecBuilder.fill(0.1, 0.1, 0.1), // estimator values (x, y, rotation) std-devs
                 VecBuilder.fill(0.5, 0.5, 0.5)
         );
+
+        AutoBuilder.configureHolonomic(
+                this::getPose,
+                this::resetOdometry,
+                this::getRobotVelocity,
+                this::driveRobotRelative,
+                new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants TODO tune PID
+                        new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants TODO tune PID
+                        4.5, // Max module speed, in m/s
+                        0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+                        new ReplanningConfig() // Default path replanning config. See the API for the options here
+                ),
+                this // Reference to this subsystem to set requirements
+
+        );
     }
 
     @Override
@@ -107,6 +126,10 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
     {
         swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
+    }
+
+    public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+        swerveDrive.drive(new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond), chassisSpeeds.omegaRadiansPerSecond, false, true);
     }
 
     public void rotate(double rotation) {
@@ -181,9 +204,9 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
     public void stop() {
         swerveDrive.lockPose();
     }
-    public void addTrajectory(PathPlannerTrajectory m_trajectory) {
-        field2d.getObject("traj").setTrajectory(m_trajectory);
-    }
+    // public void addTrajectory(PathPlannerTrajectory m_trajectory) {
+    //     field2d.getObject("traj").setTrajectory(m_trajectory);
+    // }
 
     public void setPosition(Pose2d position) {
         zeroGyro();
@@ -207,6 +230,7 @@ public class SwerveSubsystem extends SubsystemBase implements SubsystemLogging {
     {
         return swerveDrive.getPose();
     }
+
     public Pose2d getPosition() {
         return estimator.getEstimatedPosition();
     }

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Constants;
 import frc.robot.commands.Limelight.LimelightDrive;
+import frc.robot.commands.auto.PathFactory;
 import frc.robot.commands.drive.*;
 import frc.robot.subsystems.DigitalSensor;
 import frc.robot.subsystems.LimeLight;
@@ -22,6 +25,7 @@ import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -106,9 +110,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-//     return AutoFactory.runTestAutoForwardOnly(drivebase);
-//    return new ControllerDrive(drivebase, () -> 0, () -> 0, () -> 0, true);
-    return chooser.getSelected();
+
+    new PathFactory();
+    return PathFactory.straightPath();
+        
+      
   }
 }
+
