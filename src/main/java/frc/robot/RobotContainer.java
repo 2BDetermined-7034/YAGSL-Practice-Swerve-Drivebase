@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Constants;
+import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Limelight.LimelightDrive;
 import frc.robot.commands.drive.*;
 import frc.robot.subsystems.DigitalSensor;
@@ -74,7 +75,6 @@ public class RobotContainer {
 
     // drivebase.setDefaultCommand(controlDriveLogi);
     drivebase.setDefaultCommand(controlDrive);
-    sensor.setDefaultCommand(new a(sensor));
 //    photon.setDefaultCommand(new AprilTag(photon));
 
 
@@ -106,9 +106,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-//     return AutoFactory.runTestAutoForwardOnly(drivebase);
-//    return new ControllerDrive(drivebase, () -> 0, () -> 0, () -> 0, true);
-    return chooser.getSelected();
+    return new AutoFactory().straightPath(drivebase);
   }
 }
