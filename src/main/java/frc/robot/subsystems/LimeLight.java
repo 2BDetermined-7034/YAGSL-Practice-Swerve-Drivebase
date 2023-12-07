@@ -14,7 +14,10 @@ import frc.robot.SubsystemLogging;
 import frc.robot.utils.Distance;
 
 import frc.robot.Constants.Constants.Vision;
+import frc.robot.utils.RationalInterp;
+import frc.robot.utils.Vector2;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 
@@ -39,8 +42,8 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     private static IntegerPublisher ledModePub;
     private static IntegerSubscriber ledModeSub;
     private static DoublePublisher distance;
-    private static Distance distanceCalculator;
-
+//    private static Distance distanceCalculator;
+    private static RationalInterp distanceCalculator = new RationalInterp();
 
     /**
      * Creates a new LimeLight.
@@ -49,7 +52,11 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
 
         NetworkTable limeLightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-        distanceCalculator = new Distance(9.0, Constants.Vision.distanceScale, 2.0, Math.toRadians(frc.robot.Constants.Constants.Vision.limeLightHorizontalFOV), Math.toRadians(frc.robot.Constants.Constants.Vision.limeLightVerticalFOV));
+//        distanceCalculator = new Distance(9.0, Constants.Vision.distanceScale, 2.0, Math.toRadians(frc.robot.Constants.Constants.Vision.limeLightHorizontalFOV), Math.toRadians(frc.robot.Constants.Constants.Vision.limeLightVerticalFOV));
+        
+        distanceCalculator.points = new Vector2[2];
+        distanceCalculator.points[0] = new Vector2(15.785, 57.5);
+        distanceCalculator.points[1] = new Vector2(6.6, 114.0);
 
         getPipeSub = limeLightTable.getIntegerTopic("getpipe").subscribe(0);
 
@@ -76,7 +83,8 @@ public class LimeLight extends SubsystemBase implements SubsystemLogging {
     }
 
     public double getTargetDistance() {
-        return distanceCalculator.getDistance(Math.toRadians(getTargetOffsetX()), Math.toRadians(getTargetOffsetY()));
+//        return distanceCalculator.getDistance(Math.toRadians(getTargetOffsetX()), Math.toRadians(getTargetOffsetY()));
+        return distanceCalculator.get(getTargetOffsetY());
     }
 
     @Override
