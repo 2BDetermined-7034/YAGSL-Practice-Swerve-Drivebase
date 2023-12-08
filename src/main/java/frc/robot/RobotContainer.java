@@ -38,7 +38,6 @@ public class RobotContainer {
   public static final SwerveSubsystem drivebase = SwerveSubsystem.getInstance();
   public static final LimeLight limelight = new LimeLight();
   private final SendableChooser<Command> chooser = new SendableChooser<>();
-  public final SendableChooser<String> teamChooser = new SendableChooser<>();
   private final PhotonVisionSubsystem photon = new PhotonVisionSubsystem();
   public static Field2d field = new Field2d();
 
@@ -67,10 +66,7 @@ public class RobotContainer {
 //    chooser.setDefaultOption("Do nothing", new WaitCommand(1));
 //
 //    SmartDashboard.putData("Auto",chooser);
-    teamChooser.addOption("Red Team", "red");
-    teamChooser.addOption("Blue Team", "blue");
 
-    SmartDashboard.putData("Team", teamChooser);
 
 
     // drivebase.setDefaultCommand(controlDriveLogi);

@@ -37,10 +37,13 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
     public void execute() {
         double output = 0;
 
+        log("Target available", limeLight.isTargetAvailable());
+
+
         if(limeLight.isTargetAvailable()) {
 
             double tx = limeLight.getTargetOffsetX();
-            pid = new PIDController(0.01, 0, 0);
+            pid = new PIDController(0.02, 0, 0);
             pid.setTolerance(5);
             pid.setSetpoint(0);
             double currentAngle = swerve.getAngle().getDegrees();
@@ -64,10 +67,7 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
             log("Aspect Ratio", aspectRatio);
 
 
-            if (opposite) {
 
-
-            }
 
         }
 
@@ -100,13 +100,15 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
             case Red:
                 // target blue
 
-                target = aspectRatio > 3.5;
+//                target = aspectRatio > 3.5;
+                target = true;
                 break;
 
             case Blue:
                 // target red
 
-                target = aspectRatio < 3.4;
+//                target = aspectRatio < 3.4;
+                target = true;
                 break;
 
         }
