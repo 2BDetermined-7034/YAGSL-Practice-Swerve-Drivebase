@@ -43,9 +43,9 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
         if(limeLight.isTargetAvailable()) {
 
             double tx = limeLight.getTargetOffsetX();
-            pid = new PIDController(0.02, 0, 0);
+            pid = new PIDController(0.02, 000.00, 0.00000);
             pid.setTolerance(5);
-            pid.setSetpoint(0);
+            pid.setSetpoint(0 + swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.001);
             double currentAngle = swerve.getAngle().getDegrees();
 
             output = -pid.calculate(tx);
