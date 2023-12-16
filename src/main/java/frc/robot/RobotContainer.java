@@ -92,7 +92,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    new Trigger(driverController::getShareButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
+    new Trigger(logiController::getBackButton).onTrue(drivebase.runOnce(drivebase::zeroGyro));
 
 //    new Trigger(driverController::getCircleButton).toggleOnTrue(new LimelightDrive(drivebase, limelight, () -> MathUtil.applyDeadband(driverController.getLeftX(), 0.1), () -> MathUtil.applyDeadband(driverController.getLeftY(), 0.1)));
 
