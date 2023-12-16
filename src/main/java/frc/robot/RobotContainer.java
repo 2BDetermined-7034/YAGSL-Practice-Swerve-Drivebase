@@ -73,7 +73,7 @@ public class RobotContainer {
 
 
     // drivebase.setDefaultCommand(controlDriveLogi);
-    drivebase.setDefaultCommand(controlDrive);
+    drivebase.setDefaultCommand(controlDriveLogi);
     sensor.setDefaultCommand(new a(sensor));
 //    photon.setDefaultCommand(new AprilTag(photon));
 
