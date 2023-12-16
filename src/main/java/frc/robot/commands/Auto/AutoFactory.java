@@ -10,8 +10,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoFactory {
 
     // TODO Tune PID as anything under 3 meters overshoots
-    public static Command runTestAutoForwardOnly(SwerveSubsystem drive) {
-        PathPlannerTrajectory path = PathPlanner.loadPath("Test", new PathConstraints(1, 1));
+    public Command straightPath(SwerveSubsystem drive) {
+        PathPlannerTrajectory path = PathPlanner.loadPath("Straight", new PathConstraints(1, 1));
 
         return new PathFactory(drive, path, true).getCommand();
     }
