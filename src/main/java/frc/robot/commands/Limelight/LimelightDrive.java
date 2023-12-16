@@ -17,6 +17,15 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
     private PIDController pid;
     boolean opposite;
     DoubleSupplier x,y,rot;
+
+    /**
+     * Command for making the drivebase track a retroreflective tape target with rotation while maintaining position from the controller
+     * @param swerve drivebase
+     * @param limeLight limelight
+     * @param x X joystick input
+     * @param y Y joystick input
+     * @param rot theta joystick input
+     */
     public LimelightDrive(SwerveSubsystem swerve, LimeLight limeLight, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
         this.x = x;
         this.y = y;
@@ -45,7 +54,9 @@ public class LimelightDrive extends CommandBase implements SubsystemLogging {
             double tx = limeLight.getTargetOffsetX();
             pid = new PIDController(0.02, 000.00, 0.00000);
             pid.setTolerance(5);
-            pid.setSetpoint(0 + swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.001);
+
+            //Second term is for keeping the robot ahead of the target to account for shooter delay
+            pid.setSetpoint(000.000 + swerve.getChassisSpeeds().omegaRadiansPerSecond * 0.001);
             double currentAngle = swerve.getAngle().getDegrees();
 
             output = -pid.calculate(tx);
